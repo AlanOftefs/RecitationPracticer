@@ -1,0 +1,12 @@
+-v       #-[characteristic]
+　　　　  #the empty line is needed　　　　
+eat      #question
+食べる    #answer
+sleep
+寝る
+-adj
+
+delicious
+美味しい
+delicious    #you can match multiple same question with several different answers. all these questions will be asked only once. either answer connected to it is considered correct
+おいしい
