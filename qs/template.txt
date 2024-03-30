@@ -1,5 +1,4 @@
--v       #-[characteristic]
-　　　　  #the empty line is needed　　　　
+-v       #-[characteristic]　　
 eat      #question
 食べる    #answer
 sleep
@@ -10,3 +9,11 @@ delicious
 美味しい
 delicious    #you can match multiple same question with several different answers. all these questions will be asked only once. either answer connected to it is considered correct
 おいしい
+-v
+
+*do　　　#to answer several words with a same meaning for more than one times, you can add "*" before them
+なさる
+*do
+いらっしゃる
+*do
+おいでになる
