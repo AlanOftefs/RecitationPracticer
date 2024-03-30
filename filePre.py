@@ -4,6 +4,8 @@ import os
 import logRec
 import cache
 from natsort import natsorted
+from question import Question, PassingMode
+from specialChrDetector import SpecialChrDetector
 rootPath="qs"
 
 def TimeFormat(oSec):        
@@ -53,30 +55,37 @@ def AddWordClass(word, wordClass):
     else:
         return word
 def Read(file):
-    words={}
+    words=[]
+    cnt = 0
+    wordClass = ""
     with open(rootPath + "/" + file, "r", encoding="utf-8") as file:
-        cnt=0        
-        temp = []
-        wordClass = ""
-                
         for line in file:
-            lineS = line.strip()            
-            if len(lineS) > 0 and lineS[0] == "-":
-                wordClass = lineS[1:len(lineS)]
-                continue
+            lineS = line.strip()
             if len(lineS) == 0:
                 continue
-            temp.append(lineS)
-            if cnt % 2== 1:
-                key = AddWordClass(temp[0], wordClass)
-                try:
-                    words[key].append(temp[1])
-                except KeyError: #if a key first appeared, its list will be empty and therefore can't be appended
-                    words[key] = []
-                    words[key].append(temp[1])       
-                temp=[]                
-            cnt+=1                
+            #Filter the line with special characters
+            scd = SpecialChrDetector(lineS)
+            if scd.GetType() == "WordClass":
+                wordClass = lineS[1:len(lineS)]
+            elif scd.GetType() == "Repeating":
+                if len(words) == 0 or words[-1].passingMode != PassingMode.all or words[-1].GetContent() != lineS:
+                    temp = Question(lineS, [], wordClass, PassingMode.all)
+                    words.append(temp)
+                cnt += 1
+            elif scd.GetType() == "None": #question or ans
+                if cnt % 2 == 0: #Normal question being received
+                    if len(words) == 0 or words[-1].GetContent() != lineS:
+                        temp = Question(lineS, [], wordClass, PassingMode.any)
+                        words.append(temp)
+                elif cnt % 2 == 1: # All ansed
+                    words[-1].AddAns(lineS)
+                cnt += 1
         file.close()    
     return words
 
 #SelectFile()
+if __name__ == "__main__":
+    test = Read("38毛皮.txt")
+    for i in test:
+        if "候補地" in i.anses:
+            print(i.Check("候補地"))

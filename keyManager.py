@@ -26,7 +26,6 @@ class KeyMapping():
         self.Add(result)
         keyMappingAll[result] = func
         return result
-    
     def FindKey(self, command):
         return self.keyMapping[command]
     def SetActiveKey(self, command, b):
@@ -54,6 +53,10 @@ class KeyMapping():
                 return "None"
         except:
             return "None"
+    def Input(self, string):
+        command = input(string)
+        state = self.Invoke(command)
+        return (command, state)
 def Test():
     keyMapping = KeyMapping()
     keyMapping.BuildKeyMapping(["A", "a"], A, "_")

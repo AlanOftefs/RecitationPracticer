@@ -1,13 +1,15 @@
 #!/usr/bin/python
 #-*- coding : uft-8 -*-
-class ScoreCal:
+from calculator import Calculator
+class ScoreCal(Calculator):
     '''return a percentage'''
     def __init__(self, totalNum):
-        self.totalNum=totalNum
-        self.correctNum = 0
-    def AddCorrect(self):
-        self.correctNum+=1
+        super().__init__()
+        self.totalNum = totalNum
     def Cal(self):
         return int(float(self.correctNum) / float(self.totalNum) * 100)
+    def Refresh(self):
+        self.correctNum = 0
+        self.totalNum = 0
         
     
